@@ -224,20 +224,7 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
     }
   }
 
-  _getOnTargetTap() {
-    if (widget.disposeOnTap == true) {
-      return widget.onTargetClick == null
-          ? () {
-              ShowCaseWidget.of(context).dismiss();
-            }
-          : () {
-              ShowCaseWidget.of(context).dismiss();
-              widget.onTargetClick();
-            };
-    } else {
-      return widget.onTargetClick ?? _nextIfAny;
-    }
-  }
+
 
   _getOnTooltipTap() {
     if (widget.disposeOnTap == true) {
@@ -283,7 +270,6 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
             _TargetWidget(
               offset: offset,
               size: size,
-              onTap: _getOnTargetTap(),
               shapeBorder: widget.shapeBorder,
             ),
             ToolTipWidget(
