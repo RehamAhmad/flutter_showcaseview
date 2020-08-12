@@ -57,6 +57,8 @@ class Showcase extends StatefulWidget {
   final bool disableAnimation;
   final Function close;
   final bool xLeftPosition;
+  final bool showXIcon;
+  final double itemBorderRadius;
   const Showcase(
       {@required this.key,
       @required this.child,
@@ -76,6 +78,8 @@ class Showcase extends StatefulWidget {
       this.disableAnimation = false,
       this.close,
       this.xLeftPosition = false,
+      this.showXIcon = true,
+      this.itemBorderRadius,
       this.contentPadding = const EdgeInsets.symmetric(vertical: 8)})
       : height = null,
         width = null,
@@ -115,6 +119,8 @@ class Showcase extends StatefulWidget {
       @required this.width,
       this.close,
       this.xLeftPosition,
+      @required this.showXIcon,
+      this.itemBorderRadius,
       this.title,
       this.description,
       this.shapeBorder,
@@ -253,6 +259,7 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
     Size screenSize,
     Function close,
     bool xLeftPosition,
+    // bool showXIcon
   ) {
     return  Visibility(
         visible: _showShowCase,
@@ -268,7 +275,8 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
                   painter: ShapePainter(
                       opacity: widget.overlayOpacity,
                       rect: position.getRect(),
-                      shapeBorder: widget.shapeBorder,
+                      itemBorderRadius:widget.itemBorderRadius,
+                      shapeBorder: CircleBorder(),
                       color: widget.overlayColor),
                 ),
               ),
@@ -297,8 +305,8 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
               onTooltipTap: _getOnTooltipTap(),
               contentPadding: widget.contentPadding,
             ),
-             // x icon
-            Positioned(
+
+            widget.showXIcon == true ? Positioned(
               top: 60,
               left: xLeftPosition != null && xLeftPosition ? 30 : null,
               right: xLeftPosition != null && xLeftPosition ? null : 30,
@@ -310,7 +318,7 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),color: Colors.white), 
                 child: Icon(Icons.close, color: Colors.grey,)),
               ),
-            ),
+            ):Container(),
           ],
         ),
       );
