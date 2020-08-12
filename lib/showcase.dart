@@ -55,7 +55,8 @@ class Showcase extends StatefulWidget {
   final VoidCallback onTargetClick;
   final bool disposeOnTap;
   final bool disableAnimation;
-
+  final Function close;
+  final bool xLeftPosition;
   const Showcase(
       {@required this.key,
       @required this.child,
@@ -73,6 +74,8 @@ class Showcase extends StatefulWidget {
       this.disposeOnTap,
       this.animationDuration = const Duration(milliseconds: 2000),
       this.disableAnimation = false,
+      this.close,
+      this.xLeftPosition = false,
       this.contentPadding = const EdgeInsets.symmetric(vertical: 8)})
       : height = null,
         width = null,
@@ -110,6 +113,8 @@ class Showcase extends StatefulWidget {
       @required this.container,
       @required this.height,
       @required this.width,
+      this.close,
+      this.xLeftPosition,
       this.title,
       this.description,
       this.shapeBorder,
@@ -211,7 +216,7 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
     Size size = MediaQuery.of(context).size;
     return AnchoredOverlay(
       overlayBuilder: (BuildContext context, Rect rectBound, Offset offset) =>
-          buildOverlayOnTarget(offset, rectBound.size, rectBound, size),
+          buildOverlayOnTarget(offset, rectBound.size, rectBound, size, widget.close, widget.xLeftPosition),
       showOverlay: true,
       child: widget.child,
     );
@@ -240,21 +245,22 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
       return widget.onToolTipClick ?? () {};
     }
   }
-
+  
   buildOverlayOnTarget(
     Offset offset,
     Size size,
     Rect rectBound,
     Size screenSize,
-  ) =>
-      Visibility(
+    Function close,
+    bool xLeftPosition,
+  ) {
+    return  Visibility(
         visible: _showShowCase,
         maintainAnimation: true,
         maintainState: true,
         child: Stack(
           children: [
             GestureDetector(
-              onTap: _nextIfAny,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -267,6 +273,7 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
                 ),
               ),
             ),
+           
             _TargetWidget(
               offset: offset,
               size: size,
@@ -290,9 +297,24 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
               onTooltipTap: _getOnTooltipTap(),
               contentPadding: widget.contentPadding,
             ),
+             // x icon
+            Positioned(
+              top: 60,
+              left: xLeftPosition != null && xLeftPosition ? 30 : null,
+              right: xLeftPosition != null && xLeftPosition ? null : 30,
+              child: GestureDetector(
+              onTap: close != null ? close: _nextIfAny, child:
+              Container(
+                height: 50, 
+                width: 50,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),color: Colors.white), 
+                child: Icon(Icons.close, color: Colors.grey,)),
+              ),
+            ),
           ],
         ),
       );
+  }
 }
 
 class _TargetWidget extends StatelessWidget {
