@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 class ShapePainter extends CustomPainter {
   Rect rect;
+  final double itemBorderRadius;
   final ShapeBorder shapeBorder;
   final Color color;
   final double opacity;
@@ -36,6 +37,7 @@ class ShapePainter extends CustomPainter {
     @required this.rect,
     this.color,
     this.shapeBorder,
+    this.itemBorderRadius,
     this.opacity,
   });
 
@@ -46,7 +48,7 @@ class ShapePainter extends CustomPainter {
     RRect outer =
     RRect.fromLTRBR(0, 0, size.width, size.height, Radius.circular(0));
 
-    double radius = shapeBorder == CircleBorder() ? 50 : 3;
+    double radius = itemBorderRadius != null ? itemBorderRadius : 50.0;
 
     RRect inner = RRect.fromRectAndRadius(rect, Radius.circular(radius));
     canvas.drawDRRect(outer, inner, paint);
