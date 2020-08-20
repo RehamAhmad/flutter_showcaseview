@@ -57,6 +57,8 @@ class Showcase extends StatefulWidget {
   final bool disableAnimation;
   final Function close;
   final bool xLeftPosition;
+  final double xTopPadding;
+  final double xSidePadding;
   final bool showXIcon;
   final double itemBorderRadius;
   const Showcase(
@@ -78,6 +80,8 @@ class Showcase extends StatefulWidget {
       this.disableAnimation = false,
       this.close,
       this.xLeftPosition = false,
+      this.xTopPadding,
+      this.xSidePadding,
       this.showXIcon = true,
       this.itemBorderRadius,
       this.contentPadding = const EdgeInsets.symmetric(vertical: 8)})
@@ -131,6 +135,8 @@ class Showcase extends StatefulWidget {
       this.showcaseBackgroundColor = Colors.white,
       this.textColor = Colors.black,
       this.onTargetClick,
+      this.xTopPadding,
+      this.xSidePadding,
       this.disposeOnTap,
       this.animationDuration = const Duration(milliseconds: 2000),
       this.disableAnimation = false,
@@ -261,7 +267,11 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
     bool xLeftPosition,
     // bool showXIcon
   ) {
-    return  Visibility(
+    double padding = 20.0;
+    if(widget.xSidePadding != null){
+      padding = widget.xSidePadding;
+    }
+    return Visibility(
         visible: _showShowCase,
         maintainAnimation: true,
         maintainState: true,
@@ -307,9 +317,9 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
             ),
 
             widget.showXIcon == true ? Positioned(
-              top: 60,
-              left: xLeftPosition != null && xLeftPosition ? 30 : null,
-              right: xLeftPosition != null && xLeftPosition ? null : 30,
+              top: widget.xTopPadding == null? 45 : widget.xTopPadding,
+              left: xLeftPosition != null && xLeftPosition ? padding : null,
+              right: xLeftPosition != null && xLeftPosition ? null : padding,
               child: GestureDetector(
               onTap: close != null ? close: _nextIfAny, child:
               Container(
